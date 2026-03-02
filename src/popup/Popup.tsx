@@ -1,14 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
-import { Settings, Palette } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Palette } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyContent,
+} from "@/components/ui/empty";
+import { PopupHeader } from "@/popup/components/PopupHeader";
+import { PopupRuleItem } from "@/popup/components/PopupRuleItem";
 import { useCurrentDomain } from "@/hooks/useCurrentDomain";
 import type { CSSRule } from "@/types/rule";
 import * as storage from "@/services/storageService";
-import { APP_NAME, POPUP_WIDTH, POPUP_MIN_HEIGHT } from "@/config";
+import { POPUP_WIDTH, POPUP_MIN_HEIGHT } from "@/config";
 
 export function Popup() {
   const { domain, loading: domainLoading } = useCurrentDomain();
@@ -45,22 +52,9 @@ export function Popup() {
   const isLoading = domainLoading || loading;
 
   return (
-    <div style={{ width: POPUP_WIDTH, minHeight: POPUP_MIN_HEIGHT }} className="bg-background text-foreground">
+    <div style={{ width: POPUP_WIDTH, minHeight: POPUP_MIN_HEIGHT }} className="bg-background text-foreground overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b">
-        <div className="flex items-center gap-2">
-          <Palette className="h-5 w-5 text-primary" />
-          <h1 className="text-base font-semibold">{APP_NAME}</h1>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={openOptionsPage}
-          title="Open settings"
-        >
-          <Settings className="h-4 w-4" />
-        </Button>
-      </div>
+      <PopupHeader onOpenSettings={openOptionsPage} />
 
       {/* Domain badge */}
       {domain && (
@@ -72,7 +66,7 @@ export function Popup() {
       )}
 
       {/* Rules */}
-      <ScrollArea className="max-h-[400px]">
+      <ScrollArea className="max-h-[400px] w-full overflow-x-hidden">
         <div className="p-4 space-y-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
@@ -81,39 +75,31 @@ export function Popup() {
               </div>
             </div>
           ) : rules.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 gap-2 text-center">
-              <Palette className="h-8 w-8 text-muted-foreground/50" />
-              <p className="text-sm text-muted-foreground">
-                No CSS rules for this site
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={openOptionsPage}
-                className="mt-2"
-              >
-                Create a rule
-              </Button>
-            </div>
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Palette />
+                </EmptyMedia>
+                <EmptyTitle>No CSS rules for this site</EmptyTitle>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={openOptionsPage}
+                >
+                  Create a rule
+                </Button>
+              </EmptyContent>
+            </Empty>
           ) : (
             rules.map((rule, index) => (
-              <div key={rule.id}>
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex-1 min-w-0 mr-3">
-                    <p className="text-sm font-medium truncate">{rule.name}</p>
-                    <p className="text-xs text-muted-foreground font-mono truncate">
-                      {rule.domain}
-                    </p>
-                  </div>
-                  <Switch
-                    checked={rule.enabled}
-                    onCheckedChange={(checked) =>
-                      handleToggle(rule.id, checked)
-                    }
-                  />
-                </div>
-                {index < rules.length - 1 && <Separator />}
-              </div>
+              <PopupRuleItem
+                key={rule.id}
+                rule={rule}
+                onToggle={handleToggle}
+                showSeparator={index < rules.length - 1}
+              />
             ))
           )}
         </div>

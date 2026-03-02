@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, Archive } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { CSSEditor } from "@/components/CSSEditor";
+import { EditorHeader } from "@/options/components/EditorHeader";
+import { RuleForm } from "@/options/components/RuleForm";
 import * as storage from "@/services/storageService";
 
 export function RuleEditor() {
@@ -76,88 +73,28 @@ export function RuleEditor() {
   return (
     <div className="space-y-6">
       {/* Top bar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              {isNew ? "New Rule" : "Edit Rule"}
-            </h2>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {!isNew && (
-            <Button variant="outline" onClick={handleArchive}>
-              <Archive className="h-4 w-4 mr-2" />
-              Archive
-            </Button>
-          )}
-          <Button onClick={handleSave} disabled={saving || !name.trim() || !domain.trim()}>
-            <Save className="h-4 w-4 mr-2" />
-            {saving ? "Saving…" : "Save"}
-          </Button>
-        </div>
-      </div>
+      <EditorHeader
+        isNew={isNew}
+        saving={saving}
+        canSave={!!name.trim() && !!domain.trim()}
+        onBack={() => navigate("/")}
+        onSave={handleSave}
+        onArchive={isNew ? undefined : handleArchive}
+      />
 
       <Separator />
 
       {/* Form */}
-      <div className="grid gap-6 max-w-2xl">
-        {/* Name */}
-        <div className="space-y-2">
-          <label htmlFor="rule-name" className="text-sm font-medium">
-            Name
-          </label>
-          <Input
-            id="rule-name"
-            placeholder="e.g. Dark mode for GitHub"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-
-        {/* Domain */}
-        <div className="space-y-2">
-          <label htmlFor="rule-domain" className="text-sm font-medium">
-            Domain
-          </label>
-          <Input
-            id="rule-domain"
-            placeholder="e.g. github.com"
-            value={domain}
-            onChange={(e) => setDomain(e.target.value)}
-            className="font-mono"
-          />
-          <p className="text-xs text-muted-foreground">
-            Use <code className="bg-muted px-1 rounded">*</code> to match all
-            domains
-          </p>
-        </div>
-
-        {/* Enabled */}
-        <div className="flex items-center justify-between">
-          <label htmlFor="rule-enabled" className="text-sm font-medium">
-            Enabled
-          </label>
-          <Switch
-            id="rule-enabled"
-            checked={enabled}
-            onCheckedChange={setEnabled}
-          />
-        </div>
-
-        {/* CSS Editor */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">CSS</label>
-          <CSSEditor
-            value={cssText}
-            onChange={setCssText}
-            className="min-h-[300px]"
-          />
-        </div>
-      </div>
+      <RuleForm
+        name={name}
+        domain={domain}
+        cssText={cssText}
+        enabled={enabled}
+        onNameChange={setName}
+        onDomainChange={setDomain}
+        onCssChange={setCssText}
+        onEnabledChange={setEnabled}
+      />
     </div>
   );
 }
