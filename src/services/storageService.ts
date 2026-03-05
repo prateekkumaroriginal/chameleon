@@ -1,10 +1,10 @@
 import type { CSSRule } from "@/types/rule";
 import { STORAGE_KEY } from "@/config";
+import { generateId } from "@/lib/id";
 
 /**
  * Extracts just the hostname from a domain string that may contain
  * a protocol, path, or other URL parts.
- * e.g. "https://cdn-www6.topfans.dev/path" → "cdn-www6.topfans.dev"
  */
 export function extractHostname(input: string): string {
   let cleaned = input.trim();
@@ -24,9 +24,6 @@ export function extractHostname(input: string): string {
   return cleaned;
 }
 
-function generateId(): string {
-  return crypto.randomUUID();
-}
 
 async function getAllRules(): Promise<CSSRule[]> {
   const result = await chrome.storage.local.get(STORAGE_KEY);
@@ -50,7 +47,7 @@ export async function getArchivedRules(): Promise<CSSRule[]> {
 export function domainMatches(tabHostname: string, ruleDomain: string): boolean {
   if (ruleDomain === "*") return true;
   const ruleHost = extractHostname(ruleDomain);
-  // Exact match or subdomain match (e.g. rule "topfans.dev" matches "cdn-www6.topfans.dev")
+  // Exact match or subdomain match (e.g. rule "example.com" matches "sub.example.com")
   return tabHostname === ruleHost || tabHostname.endsWith("." + ruleHost);
 }
 

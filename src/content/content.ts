@@ -1,6 +1,12 @@
 // Chameleon Content Script
 
-import { STORAGE_KEY, STYLE_ID_PREFIX } from "@/config";
+import {
+  STORAGE_KEY,
+  PALETTES_STORAGE_KEY,
+  STYLE_ID_PREFIX,
+  PALETTE_STYLE_PREFIX
+} from "@/config";
+import type { Palette } from "@/types/palette";
 
 interface CSSRuleData {
   id: string;
@@ -38,20 +44,29 @@ function getStyleId(ruleId: string): string {
   return `${STYLE_ID_PREFIX}${ruleId}`;
 }
 
-function injectRule(rule: CSSRuleData): void {
-  // Remove existing if present (to update CSS content)
-  removeRule(rule.id);
+function getPaletteStyleId(paletteId: string): string {
+  return `${PALETTE_STYLE_PREFIX}${paletteId}`;
+}
 
+function injectStyle(styleId: string, css: string): void {
+  removeStyle(styleId);
   const style = document.createElement("style");
-  style.id = getStyleId(rule.id);
-  style.setAttribute("data-chameleon-id", rule.id);
-  style.textContent = rule.css;
+  style.id = styleId;
+  style.textContent = css;
   document.head.appendChild(style);
 }
 
-function removeRule(ruleId: string): void {
-  const el = document.getElementById(getStyleId(ruleId));
+function removeStyle(styleId: string): void {
+  const el = document.getElementById(styleId);
   if (el) el.remove();
+}
+
+function injectRule(rule: CSSRuleData): void {
+  injectStyle(getStyleId(rule.id), rule.css);
+}
+
+function removeRule(ruleId: string): void {
+  removeStyle(getStyleId(ruleId));
 }
 
 async function applyRules(): Promise<void> {
@@ -69,12 +84,46 @@ async function applyRules(): Promise<void> {
   }
 }
 
+async function applyPalettes(): Promise<void> {
+  const result = await chrome.storage.local.get(PALETTES_STORAGE_KEY);
+  const palettes: Palette[] =
+    (result[PALETTES_STORAGE_KEY] as Palette[] | undefined) ?? [];
+  const hostname = location.hostname;
+
+  for (const palette of palettes) {
+    const styleId = getPaletteStyleId(palette.id);
+    if (
+      domainMatches(hostname, palette.domain) &&
+      palette.enabled &&
+      !palette.isArchived &&
+      palette.activeVariantId
+    ) {
+      const activeVariant = palette.variants.find(
+        (v) => v.id === palette.activeVariantId
+      );
+      if (activeVariant) {
+        injectStyle(styleId, activeVariant.css);
+      } else {
+        removeStyle(styleId);
+      }
+    } else {
+      removeStyle(styleId);
+    }
+  }
+}
+
 // Initial application
 applyRules();
+applyPalettes();
 
 // Listen for storage changes to react in real-time
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "local" && changes[STORAGE_KEY]) {
-    applyRules();
+  if (area === "local") {
+    if (changes[STORAGE_KEY]) {
+      applyRules();
+    }
+    if (changes[PALETTES_STORAGE_KEY]) {
+      applyPalettes();
+    }
   }
 });

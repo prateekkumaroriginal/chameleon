@@ -1,6 +1,7 @@
-import { Settings, Palette } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/config";
+import iconUrl from "@/assets/icon-48.png";
 
 interface PopupHeaderProps {
   onOpenSettings: () => void;
@@ -10,7 +11,7 @@ export function PopupHeader({ onOpenSettings }: PopupHeaderProps) {
   return (
     <div className="flex items-center justify-between px-4 py-3 border-b">
       <div className="flex items-center gap-2">
-        <Palette className="h-5 w-5 text-primary" />
+        <img src={iconUrl} alt="Chameleon Logo" className="h-5 w-5 object-contain" />
         <h1 className="text-base font-semibold">{APP_NAME}</h1>
       </div>
       <Button
