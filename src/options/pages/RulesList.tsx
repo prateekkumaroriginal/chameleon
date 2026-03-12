@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Plus, Archive, Braces } from "lucide-react";
+import { Archive, Plus, Braces } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/PageHeader";
@@ -18,30 +18,29 @@ export function RulesList() {
   const navigate = useNavigate();
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <PageHeader
         title="CSS Rules"
-        description="Manage your custom CSS injection rules"
+        description="Manage precision CSS injections by site, then toggle them from a calmer, theme-aware popup."
         actions={
           <>
             <Button variant="outline" onClick={() => navigate("/archived")}>
-              <Archive className="h-4 w-4 mr-2" />
+              <Archive className="h-4 w-4" />
               Archived
             </Button>
             <Button onClick={() => navigate("/new")}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4" />
               New Rule
             </Button>
           </>
         }
       />
 
-      <Separator />
+      <Separator className="opacity-60" />
 
-      {/* Rules list */}
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground animate-pulse">Loading rules…</p>
+        <div className="surface-card flex items-center justify-center rounded-[1.5rem] border border-white/10 px-6 py-14">
+          <p className="animate-pulse text-muted-foreground">Loading rules...</p>
         </div>
       ) : rules.length === 0 ? (
         <Empty>
@@ -52,14 +51,17 @@ export function RulesList() {
             <EmptyTitle>No CSS rules yet</EmptyTitle>
           </EmptyHeader>
           <EmptyContent>
+            <p className="text-sm leading-6 text-muted-foreground">
+              Start with one focused override instead of a giant stylesheet.
+            </p>
             <Button onClick={() => navigate("/new")} variant="outline">
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4" />
               Create your first rule
             </Button>
           </EmptyContent>
         </Empty>
       ) : (
-        <div className="space-y-2">
+        <div className="grid gap-3">
           {rules.map((rule) => (
             <RuleCard
               key={rule.id}
