@@ -2,12 +2,15 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "../index.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { Popup } from "./Popup";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <TooltipProvider>
-      <Popup />
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Popup />
+      </TooltipProvider>
+    </ThemeProvider>
   </StrictMode>
 );

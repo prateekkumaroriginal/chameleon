@@ -1,5 +1,5 @@
-import { ChevronRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
+
+import { InteractiveCard } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import type { CSSRule } from "@/types/rule";
@@ -12,8 +12,8 @@ interface RuleCardProps {
 
 export function RuleCard({ rule, onToggle, onClick }: RuleCardProps) {
   return (
-    <Card
-      className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-accent/50 transition-colors"
+    <InteractiveCard
+      className="flex-row items-center justify-between px-4 py-3 gap-0 cursor-pointer"
       onClick={onClick}
     >
       <div className="flex-1 min-w-0 mr-4">
@@ -28,16 +28,13 @@ export function RuleCard({ rule, onToggle, onClick }: RuleCardProps) {
           {rule.css.length > 80 ? "…" : ""}
         </p>
       </div>
-      <div className="flex items-center gap-3">
-        <Switch
-          checked={rule.enabled}
-          onCheckedChange={(checked) => {
-            onToggle(rule.id, checked);
-          }}
-          onClick={(e) => e.stopPropagation()}
-        />
-        <ChevronRight className="h-4 w-4 text-muted-foreground" />
-      </div>
-    </Card>
+      <Switch
+        checked={rule.enabled}
+        onCheckedChange={(checked) => {
+          onToggle(rule.id, checked);
+        }}
+        onClick={(e) => e.stopPropagation()}
+      />
+    </InteractiveCard>
   );
 }

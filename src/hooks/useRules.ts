@@ -28,9 +28,9 @@ export function useRules(): UseRulesReturn {
   }, [refresh]);
 
   const toggle = useCallback(async (id: string, enabled: boolean) => {
+    setRules((prev) => prev.map((r) => (r.id === id ? { ...r, enabled } : r)));
     await storage.toggleRule(id, enabled);
-    await refresh();
-  }, [refresh]);
+  }, []);
 
   const save = useCallback(async (rule: Omit<CSSRule, "id" | "createdAt" | "updatedAt" | "isArchived">) => {
     const newRule = await storage.saveRule(rule);
