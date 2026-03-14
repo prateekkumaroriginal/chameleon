@@ -1,6 +1,6 @@
 import { RotateCcw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { InteractiveCard } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -25,7 +25,7 @@ export function ArchivedPaletteCard({
   onDelete,
 }: ArchivedPaletteCardProps) {
   return (
-    <Card className="flex items-center justify-between px-4 py-3">
+    <InteractiveCard className="flex-row items-center justify-between px-4 py-3 gap-0">
       <div className="flex-1 min-w-0 mr-4">
         <div className="flex items-center gap-2">
           <p className="font-medium truncate">{palette.name}</p>
@@ -76,6 +76,6 @@ export function ArchivedPaletteCard({
           </DialogContent>
         </Dialog>
       </div>
-    </Card>
+    </InteractiveCard>
   );
 }

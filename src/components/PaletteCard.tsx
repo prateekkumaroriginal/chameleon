@@ -1,5 +1,5 @@
-import { ChevronRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
+
+import { InteractiveCard } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import type { Palette } from "@/types/palette";
@@ -16,8 +16,8 @@ export function PaletteCard({ palette, onToggle, onClick }: PaletteCardProps) {
   );
 
   return (
-    <Card
-      className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-accent/50 transition-colors"
+    <InteractiveCard
+      className="flex-row items-center justify-between px-4 py-3 gap-0 cursor-pointer"
       onClick={onClick}
     >
       <div className="flex-1 min-w-0 mr-4">
@@ -36,16 +36,13 @@ export function PaletteCard({ palette, onToggle, onClick }: PaletteCardProps) {
           </p>
         )}
       </div>
-      <div className="flex items-center gap-3">
-        <Switch
-          checked={palette.enabled}
-          onCheckedChange={(checked) => {
-            onToggle(palette.id, checked);
-          }}
-          onClick={(e) => e.stopPropagation()}
-        />
-        <ChevronRight className="h-4 w-4 text-muted-foreground" />
-      </div>
-    </Card>
+      <Switch
+        checked={palette.enabled}
+        onCheckedChange={(checked) => {
+          onToggle(palette.id, checked);
+        }}
+        onClick={(e) => e.stopPropagation()}
+      />
+    </InteractiveCard>
   );
 }

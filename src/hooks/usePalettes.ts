@@ -29,9 +29,9 @@ export function usePalettes(): UsePalettesReturn {
   }, [refresh]);
 
   const toggle = useCallback(async (id: string, enabled: boolean) => {
+    setPalettes((prev) => prev.map((p) => (p.id === id ? { ...p, enabled } : p)));
     await paletteStorage.togglePalette(id, enabled);
-    await refresh();
-  }, [refresh]);
+  }, []);
 
   const setActiveVariant = useCallback(async (id: string, variantId: string) => {
     await paletteStorage.setActiveVariant(id, variantId);

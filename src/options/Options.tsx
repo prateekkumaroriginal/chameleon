@@ -4,6 +4,7 @@ import { RuleEditor } from "./pages/RuleEditor";
 import { ArchivedList } from "./pages/ArchivedList";
 import { PaletteEditor } from "./pages/PaletteEditor";
 import { ArchivedPalettesList } from "./pages/ArchivedPalettesList";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { APP_NAME } from "@/config";
 import iconUrl from "@/assets/icon-48.png";
 
@@ -15,6 +16,8 @@ export function Options() {
         <div className="mx-auto flex items-center gap-3 px-6 py-4">
           <img src={iconUrl} alt="Chameleon Logo" className="h-6 w-6 object-contain" />
           <h1 className="text-xl font-bold">{APP_NAME}</h1>
+          <div className="flex-1" />
+          <ThemeToggle />
         </div>
       </header>
 
@@ -33,4 +36,3 @@ export function Options() {
     </div>
   );
 }
-
