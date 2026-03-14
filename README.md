@@ -18,7 +18,7 @@
 
 ---
 
-## ✨ Features
+# ✨ Features
 
 - **Per-Domain CSS Injection** — Create CSS rules that apply only to specific domains
 - **Popup Quick Controls** — Toggle rules on/off directly from the popup for the current site
@@ -31,7 +31,7 @@
 
 ---
 
-## 🏗️ Built With
+# 🏗️ Built With
 
 | | Technology |
 |---|---|
@@ -48,15 +48,27 @@
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Getting Started
+
+## Installation
+
+### Quick Install (Prebuilt)
+
+1. Download the extension ZIP  
+   https://github.com/prateekkumaroriginal/chameleon/releases/download/v1.0.0/chameleon.zip
+2. Extract **chameleon.zip**
+3. Open `chrome://extensions/` in Chrome
+4. Enable **Developer mode** (top-right toggle)
+5. Click **Load unpacked**
+6. Select the extracted folder
+
+## Build from Source
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) 20.19+ or 22.12+
 - [pnpm](https://pnpm.io/) 9+
 - Google Chrome or Chromium-based browser
-
-### Installation
 
 ```bash
 # Clone the repository
@@ -68,7 +80,6 @@ pnpm install
 
 # Build the extension
 pnpm build
-```
 
 ### Load in Chrome
 
@@ -95,9 +106,9 @@ pnpm build
 
 ---
 
-## 📖 Usage
+# 📖 Usage
 
-### Creating a CSS Rule
+## Creating a CSS Rule
 
 1. Click the **Chameleon** icon in your toolbar → click the **⚙️ Settings** icon
 2. Click **New Rule**
@@ -108,20 +119,20 @@ pnpm build
 4. Toggle **Enabled** on/off
 5. Click **Save**
 
-### Toggling Rules from Popup
+## Toggling Rules from Popup
 
 - Navigate to any website
 - Click the **Chameleon** icon
 - Use the **toggle switches** to enable/disable rules for the current domain
 - Changes apply instantly — no page reload needed
 
-### Archiving & Deleting Rules
+## Archiving & Deleting Rules
 
 - **Archive**: Edit a rule → click **Archive** (soft delete)
 - **Restore**: Go to **Archived** list → click **Restore**
 - **Permanent Delete**: Go to **Archived** list → click **Delete** → confirm in dialog
 
-### Domain Matching
+## Domain Matching
 
 | Rule Domain | Matches |
 |---|---|
@@ -132,7 +143,7 @@ pnpm build
 
 ---
 
-## 🧩 Permissions
+# 🧩 Permissions
 
 | Permission | Reason |
 |---|---|
@@ -143,7 +154,7 @@ pnpm build
 
 ---
 
-## 🤝 Contributing
+# 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -153,6 +164,6 @@ pnpm build
 
 ---
 
-## 📄 License
+# 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
