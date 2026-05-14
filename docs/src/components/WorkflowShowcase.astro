@@ -1,0 +1,233 @@
+---
+const steps = [
+  'Pick a website',
+  'Create a rule',
+  'Write CSS',
+  'Toggle from popup',
+  'Organize palettes',
+];
+---
+
+<section class="workflow rounded-lg border border-border bg-card p-5">
+  <div class="step-row">
+    {
+      steps.map((step, index) => (
+        <div class:list={['step', index === 2 && 'active']}>
+          <span>{String(index + 1).padStart(2, '0')}.</span>
+          <strong>{step}</strong>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="mockups">
+    <div class="browser-mock">
+      <div class="mock-header">
+        <span class="dot" />
+        <span class="dot" />
+        <span class="dot" />
+        <span class="address">mail.google.com</span>
+      </div>
+      <div class="mock-body">
+        <div class="rule-panel">
+          <div class="field">
+            <span>Name</span>
+            <strong>Gmail link color</strong>
+          </div>
+          <div class="field">
+            <span>Domain</span>
+            <strong>mail.google.com</strong>
+          </div>
+        </div>
+        <pre><code>{`a {
+  color: oklch(0.58 0.17 28) !important;
+}
+
+.promo {
+  display: none !important;
+}`}</code></pre>
+      </div>
+    </div>
+
+    <div class="popup-mock">
+      <div class="popup-title">Chameleon</div>
+      <div class="popup-rule enabled"><span>Gmail contrast</span><i /></div>
+      <div class="popup-rule enabled"><span>Hide promos</span><i /></div>
+      <div class="popup-rule"><span>News focus</span><i /></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .step-row {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    color: var(--chameleon-muted-foreground);
+  }
+
+  .step span {
+    font-weight: 700;
+  }
+
+  .step strong {
+    max-width: 10rem;
+    color: inherit;
+    font-size: 0.95rem;
+  }
+
+  .step.active {
+    color: var(--chameleon-foreground);
+  }
+
+  .step.active::before {
+    content: '';
+    width: 5rem;
+    border-top: 1px solid var(--chameleon-foreground);
+  }
+
+  .mockups {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .browser-mock,
+  .popup-mock {
+    border: 1px solid var(--chameleon-border);
+    border-radius: 1rem;
+    background: var(--chameleon-background);
+    box-shadow: var(--sl-shadow-md);
+    overflow: hidden;
+  }
+
+  .mock-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--chameleon-border);
+    padding: 0.8rem;
+  }
+
+  .dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 999rem;
+    background: var(--chameleon-border);
+  }
+
+  .address {
+    border-radius: 999rem;
+    background: var(--chameleon-muted);
+    padding: 0.25rem 0.75rem;
+    color: var(--chameleon-muted-foreground);
+    font-family: var(--__sl-font-mono);
+    font-size: 0.8rem;
+  }
+
+  .mock-body {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .rule-panel {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    border: 1px solid var(--chameleon-border);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .field span {
+    color: var(--chameleon-muted-foreground);
+    font-size: 0.75rem;
+  }
+
+  .field strong {
+    color: var(--chameleon-card-foreground);
+    font-size: 0.9rem;
+  }
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+    border: 1px solid var(--chameleon-border);
+    border-radius: 0.5rem;
+    background: var(--chameleon-card);
+    padding: 1rem;
+    color: var(--chameleon-card-foreground);
+    font-size: 0.875rem;
+  }
+
+  .popup-mock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .popup-title {
+    color: var(--chameleon-card-foreground);
+    font-weight: 700;
+  }
+
+  .popup-rule {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid var(--chameleon-border);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    color: var(--chameleon-muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  .popup-rule i {
+    width: 2rem;
+    height: 1.1rem;
+    border-radius: 999rem;
+    background: var(--chameleon-muted);
+  }
+
+  .popup-rule.enabled {
+    color: var(--chameleon-card-foreground);
+  }
+
+  .popup-rule.enabled i {
+    background: var(--chameleon-primary);
+  }
+
+  @media (min-width: 50rem) {
+    .step-row {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .mockups {
+      grid-template-columns: minmax(0, 2.3fr) minmax(15rem, 0.7fr);
+      align-items: stretch;
+    }
+
+    .mock-body {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+</style>
