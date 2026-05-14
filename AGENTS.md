@@ -10,4 +10,3 @@ Make sure that this file (AGENTS.md) is always synced with CLAUDE.md
 
 # Never Do:
 1. Never run pnpm dev.
-2. PowerShell doesn't support ```&&```, use ```;``` instead.
