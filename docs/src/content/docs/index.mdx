@@ -1,0 +1,36 @@
+---
+title: Chameleon
+description: Inject custom CSS stylesheets into any webpage.
+template: splash
+hero:
+  tagline: A Chrome extension that lets you inject custom CSS stylesheets into any webpage. Style the web your way.
+  actions:
+    - text: Get Started
+      link: /getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/user/chameleon
+      icon: external
+      variant: minimal
+---
+
+import ChameleonCard from '../../components/ChameleonCard.astro';
+import ChameleonCardGrid from '../../components/ChameleonCardGrid.astro';
+
+## Features
+
+<ChameleonCardGrid>
+  <ChameleonCard title="Per-Domain Rules" icon="pencil">
+    Create CSS rules that apply only to specific domains or globally across all sites.
+  </ChameleonCard>
+  <ChameleonCard title="Live Editing" icon="seti:css">
+    Edit CSS with a full-featured CodeMirror editor with syntax highlighting and autocomplete.
+  </ChameleonCard>
+  <ChameleonCard title="Quick Toggle" icon="approve-check">
+    Enable or disable stylesheets instantly from the popup without opening the full editor.
+  </ChameleonCard>
+  <ChameleonCard title="Palettes" icon="star">
+    Group related styles into palettes and apply them with a single click.
+  </ChameleonCard>
+</ChameleonCardGrid>

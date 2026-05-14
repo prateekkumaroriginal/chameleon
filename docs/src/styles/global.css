@@ -1,0 +1,132 @@
+@layer base, starlight, theme, components, utilities;
+
+@import '@astrojs/starlight-tailwind';
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@theme {
+  --color-background: var(--chameleon-background);
+  --color-foreground: var(--chameleon-foreground);
+  --color-card: var(--chameleon-card);
+  --color-card-foreground: var(--chameleon-card-foreground);
+  --color-primary: var(--chameleon-primary);
+  --color-primary-foreground: var(--chameleon-primary-foreground);
+  --color-secondary: var(--chameleon-secondary);
+  --color-secondary-foreground: var(--chameleon-secondary-foreground);
+  --color-muted: var(--chameleon-muted);
+  --color-muted-foreground: var(--chameleon-muted-foreground);
+  --color-accent: var(--chameleon-accent);
+  --color-accent-foreground: var(--chameleon-accent-foreground);
+  --color-border: var(--chameleon-border);
+  --color-ring: var(--chameleon-ring);
+}
+
+@layer components {
+  .header .social-icons:not(:has(a)) {
+    display: none;
+  }
+
+  .header .social-icons:not(:has(a))::after {
+    content: none;
+  }
+
+  .header,
+  .sidebar-pane {
+    background-color: var(--chameleon-background);
+  }
+
+  .header {
+    border-bottom-color: var(--chameleon-border);
+  }
+
+  @media (min-width: 50rem) {
+    .sidebar-pane {
+      border-inline-end-color: var(--chameleon-border);
+    }
+  }
+
+  button[data-open-modal] {
+    border-color: var(--chameleon-border);
+    background-color: var(--chameleon-card);
+    color: var(--chameleon-foreground);
+  }
+
+  button[data-open-modal]:hover {
+    border-color: var(--chameleon-primary);
+    color: var(--chameleon-primary);
+  }
+
+  button[data-open-modal] > kbd {
+    background-color: var(--chameleon-muted);
+    color: var(--chameleon-muted-foreground);
+  }
+
+  site-search dialog {
+    background-color: var(--chameleon-card);
+    border-color: var(--chameleon-border);
+    color: var(--chameleon-card-foreground);
+  }
+
+  site-search .dialog-frame {
+    color: var(--chameleon-card-foreground);
+  }
+
+  #starlight__search {
+    --pagefind-ui-primary: var(--chameleon-primary);
+    --pagefind-ui-text: var(--chameleon-foreground);
+    --pagefind-ui-background: var(--chameleon-card);
+    --pagefind-ui-border: var(--chameleon-border);
+    --pagefind-ui-tag: var(--chameleon-muted);
+  }
+
+  starlight-theme-select label {
+    color: var(--chameleon-muted-foreground);
+  }
+
+  starlight-theme-select label:hover,
+  starlight-theme-select label:focus-within {
+    color: var(--chameleon-foreground);
+  }
+
+  starlight-theme-select select {
+    color: inherit;
+  }
+
+  starlight-theme-select option {
+    background-color: var(--chameleon-card);
+    color: var(--chameleon-card-foreground);
+  }
+
+  .sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
+  .right-sidebar-panel h2 {
+    color: var(--chameleon-foreground);
+  }
+
+  .right-sidebar-panel a {
+    color: var(--chameleon-muted-foreground);
+  }
+
+  .right-sidebar-panel a:hover,
+  .right-sidebar-panel a[aria-current='true'] {
+    color: var(--chameleon-primary);
+  }
+
+  @media (hover: hover) {
+    .sl-markdown-content .sl-anchor-link {
+      color: var(--sl-color-text-accent);
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .sl-markdown-content .sl-heading-wrapper:hover .sl-anchor-link {
+      opacity: 0.6;
+    }
+
+    .sl-markdown-content .sl-heading-wrapper:hover .sl-anchor-link:hover,
+    .sl-markdown-content .sl-heading-wrapper:hover .sl-anchor-link:focus,
+    .sl-markdown-content .sl-anchor-link:focus-visible {
+      opacity: 1;
+    }
+  }
+}

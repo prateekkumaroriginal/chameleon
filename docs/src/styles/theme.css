@@ -1,0 +1,95 @@
+/*
+ * Chameleon — Terracotta / Rose-clay palette for Starlight
+ * Maps the extension's theme to Starlight CSS custom properties.
+ * Only color variable definitions — no layout/component CSS.
+ *
+ * Starlight's gray scale is semantic: lower numbers are stronger text,
+ * higher numbers are weaker borders/backgrounds in light mode.
+ */
+
+/* ── Light Mode ── */
+:root {
+  --sl-color-accent-low: oklch(0.92 0.015 55);
+  --sl-color-accent: oklch(0.58 0.17 28);
+  --sl-color-accent-high: oklch(0.97 0.006 60);
+
+  --sl-color-white: oklch(0.25 0.015 45);
+  --sl-color-gray-1: oklch(0.32 0.02 40);
+  --sl-color-gray-2: oklch(0.52 0.02 45);
+  --sl-color-gray-3: oklch(0.52 0.02 45);
+  --sl-color-gray-4: oklch(0.70 0.014 55);
+  --sl-color-gray-5: oklch(0.88 0.012 60);
+  --sl-color-gray-6: oklch(0.93 0.012 60);
+  --sl-color-gray-7: oklch(0.975 0.006 70);
+  --sl-color-black: oklch(0.955 0.01 70);
+
+  --sl-color-bg: oklch(0.955 0.01 70);
+  --sl-color-bg-nav: oklch(0.955 0.01 70);
+  --sl-color-bg-sidebar: oklch(0.955 0.01 70);
+  --sl-color-bg-inline-code: oklch(0.93 0.012 60);
+
+  --sl-color-hairline-light: oklch(0.88 0.012 60);
+  --sl-color-hairline: oklch(0.85 0.012 60);
+  --sl-color-hairline-shade: oklch(0.88 0.012 60);
+
+  --sl-color-text: oklch(0.25 0.015 45);
+  --sl-color-text-accent: oklch(0.58 0.17 28);
+
+  --chameleon-background: oklch(0.955 0.01 70);
+  --chameleon-foreground: oklch(0.25 0.015 45);
+  --chameleon-card: oklch(0.975 0.006 70);
+  --chameleon-card-foreground: oklch(0.25 0.015 45);
+  --chameleon-primary: oklch(0.58 0.17 28);
+  --chameleon-primary-foreground: oklch(0.97 0.006 60);
+  --chameleon-secondary: oklch(0.93 0.012 60);
+  --chameleon-secondary-foreground: oklch(0.32 0.02 40);
+  --chameleon-muted: oklch(0.93 0.012 60);
+  --chameleon-muted-foreground: oklch(0.52 0.02 45);
+  --chameleon-accent: oklch(0.92 0.015 55);
+  --chameleon-accent-foreground: oklch(0.30 0.02 40);
+  --chameleon-border: oklch(0.88 0.012 60);
+  --chameleon-ring: oklch(0.58 0.17 28);
+}
+
+/* ── Dark Mode ── */
+:root[data-theme='dark'] {
+  --sl-color-accent-low: oklch(0.30 0.04 30);
+  --sl-color-accent: oklch(0.72 0.14 28);
+  --sl-color-accent-high: oklch(0.95 0.01 60);
+
+  --sl-color-white: oklch(0.92 0.01 65);
+  --sl-color-gray-1: oklch(0.85 0.012 60);
+  --sl-color-gray-2: oklch(0.62 0.02 55);
+  --sl-color-gray-3: oklch(0.50 0.015 50);
+  --sl-color-gray-4: oklch(0.35 0.014 48);
+  --sl-color-gray-5: oklch(0.26 0.014 48);
+  --sl-color-gray-6: oklch(0.22 0.012 50);
+  --sl-color-black: oklch(0.18 0.01 50);
+
+  --sl-color-bg: oklch(0.22 0.012 50);
+  --sl-color-bg-nav: oklch(0.22 0.012 50);
+  --sl-color-bg-sidebar: oklch(0.22 0.012 50);
+  --sl-color-bg-inline-code: oklch(0.28 0.014 48);
+
+  --sl-color-hairline-light: oklch(0.32 0.014 48);
+  --sl-color-hairline: oklch(0.35 0.014 48);
+  --sl-color-hairline-shade: oklch(0.35 0.014 48);
+
+  --sl-color-text: oklch(0.90 0.012 65);
+  --sl-color-text-accent: oklch(0.72 0.14 28);
+
+  --chameleon-background: oklch(0.22 0.012 50);
+  --chameleon-foreground: oklch(0.90 0.012 65);
+  --chameleon-card: oklch(0.26 0.014 48);
+  --chameleon-card-foreground: oklch(0.90 0.012 65);
+  --chameleon-primary: oklch(0.72 0.14 28);
+  --chameleon-primary-foreground: oklch(0.20 0.012 40);
+  --chameleon-secondary: oklch(0.30 0.014 48);
+  --chameleon-secondary-foreground: oklch(0.88 0.012 60);
+  --chameleon-muted: oklch(0.30 0.014 48);
+  --chameleon-muted-foreground: oklch(0.62 0.02 55);
+  --chameleon-accent: oklch(0.32 0.016 45);
+  --chameleon-accent-foreground: oklch(0.88 0.012 60);
+  --chameleon-border: oklch(0.35 0.014 48);
+  --chameleon-ring: oklch(0.72 0.14 28);
+}

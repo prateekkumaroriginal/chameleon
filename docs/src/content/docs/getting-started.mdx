@@ -1,0 +1,56 @@
+---
+title: Getting Started
+description: Install and start using Chameleon to customize any webpage with CSS.
+---
+
+import DocsNavLinks from '../../components/DocsNavLinks.astro';
+
+## Installation
+
+1. Download the latest release from the [Chrome Web Store](#) or build from source.
+2. Click the Chameleon icon in your browser toolbar to open the popup.
+
+## Creating Your First Rule
+
+1. Navigate to any webpage you'd like to style.
+2. Click the Chameleon icon to open the popup.
+3. Click **"New Rule"** to create a CSS rule for the current domain.
+4. Write your CSS in the editor — changes apply instantly.
+
+```css
+/* Example: Make all links terracotta */
+a {
+  color: oklch(0.58 0.17 28) !important;
+}
+```
+
+## Managing Rules
+
+- **Toggle** rules on and off from the popup without deleting them.
+- **Edit** rules at any time by clicking on them in the options page.
+- **Archive** rules you don't need right now but want to keep for later.
+
+## Using Palettes
+
+Palettes let you group multiple CSS rules together and apply them as a set:
+
+1. Open the **Options** page from the popup menu.
+2. Navigate to the **Palettes** tab.
+3. Create a new palette and add your rules to it.
+4. Toggle the entire palette on or off with a single switch.
+
+## Next Steps
+
+- Explore the options page for advanced rule management.
+- Use domain-specific rules for targeted styling.
+- Combine rules into palettes for quick theme switching.
+
+<DocsNavLinks
+  links={[
+    {
+      title: 'Back to Chameleon',
+      href: '/',
+      description: 'Review the main feature overview for the extension.',
+    },
+  ]}
+/>
