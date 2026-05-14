@@ -18,7 +18,6 @@ hero:
 import ChameleonCard from '../../components/ChameleonCard.astro';
 import ChameleonCardGrid from '../../components/ChameleonCardGrid.astro';
 import ChameleonBento from '../../components/ChameleonBento.astro';
-import CommandList from '../../components/CommandList.astro';
 import CSSExamplePanel from '../../components/CSSExamplePanel.astro';
 import ScenarioBlocks from '../../components/ScenarioBlocks.astro';
 import UseCaseMatrix from '../../components/UseCaseMatrix.astro';
@@ -85,17 +84,19 @@ aside,
 
 <ScenarioBlocks />
 
-## Quick Ideas
+## Save Site Preferences
 
-<CommandList
-  commands={[
-    'restyle github.com',
-    'hide sidebar on news sites',
-    'increase contrast on dashboards',
-    'apply global link color',
-    'toggle Gmail dark theme',
-  ]}
-/>
+<ChameleonCardGrid>
+  <ChameleonCard title="Theme Mismatched Sites" icon="contrast">
+    Save dark mode for sites that only have light mode, or save a light mode for sites that only have dark mode.
+  </ChameleonCard>
+  <ChameleonCard title="Tune Reading Comfort" icon="pencil">
+    Keep preferred type sizes, line heights, content widths, and spacing rules attached to the site where they matter.
+  </ChameleonCard>
+  <ChameleonCard title="Remove Repeat Friction" icon="switch">
+    Turn recurring one-off CSS fixes into reusable rules you can enable, pause, or adjust later.
+  </ChameleonCard>
+</ChameleonCardGrid>
 
 ## How It Works
 

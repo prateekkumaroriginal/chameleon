@@ -22,6 +22,16 @@
   --color-ring: var(--chameleon-ring);
 }
 
+html[data-theme-transition]::view-transition-old(root),
+html[data-theme-transition]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-transition]::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
 @layer components {
   .header .social-icons:not(:has(a)) {
     display: none;
@@ -80,22 +90,121 @@
     --pagefind-ui-tag: var(--chameleon-muted);
   }
 
-  starlight-theme-select label {
+  starlight-theme-select.chameleon-theme-select {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .chameleon-theme-trigger {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--chameleon-foreground);
+    cursor: pointer;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .chameleon-theme-trigger:hover,
+  .chameleon-theme-trigger:focus-visible,
+  .chameleon-theme-trigger[aria-expanded='true'] {
+    background-color: var(--chameleon-accent);
+    color: var(--chameleon-accent-foreground);
+  }
+
+  .chameleon-theme-trigger:focus-visible,
+  .chameleon-theme-item:focus-visible {
+    outline: 2px solid var(--chameleon-ring);
+    outline-offset: 2px;
+  }
+
+  .chameleon-theme-trigger-icon,
+  .chameleon-theme-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
     color: var(--chameleon-muted-foreground);
   }
 
-  starlight-theme-select label:hover,
-  starlight-theme-select label:focus-within {
-    color: var(--chameleon-foreground);
+  .chameleon-theme-trigger-icon svg,
+  .chameleon-theme-icon svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
   }
 
-  starlight-theme-select select {
-    color: inherit;
-  }
-
-  starlight-theme-select option {
+  .chameleon-theme-menu {
+    position: absolute;
+    inset-block-start: calc(100% + 0.25rem);
+    inset-inline-end: 0;
+    z-index: 50;
+    display: flex;
+    min-width: 10rem;
+    flex-direction: column;
+    gap: 0.125rem;
+    overflow: hidden;
+    border: 1px solid var(--chameleon-border);
+    border-radius: 0.75rem;
     background-color: var(--chameleon-card);
+    padding: 0.25rem;
     color: var(--chameleon-card-foreground);
+    box-shadow:
+      0 16px 40px rgb(0 0 0 / 18%),
+      0 4px 12px rgb(0 0 0 / 10%);
+  }
+
+  .chameleon-theme-menu[hidden] {
+    display: none;
+  }
+
+  .chameleon-theme-item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    text-align: start;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .chameleon-theme-item:hover,
+  .chameleon-theme-item:focus-visible {
+    background-color: var(--chameleon-accent);
+    color: var(--chameleon-accent-foreground);
+  }
+
+  .chameleon-theme-check {
+    position: absolute;
+    inset-inline-end: 0.75rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background-color: currentColor;
+    opacity: 0;
+  }
+
+  .chameleon-theme-item[data-checked='true'] .chameleon-theme-check {
+    opacity: 1;
   }
 
   .sl-markdown-content :is(h1, h2, h3, h4, h5, h6),

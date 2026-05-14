@@ -1,22 +1,67 @@
-import { Sun, Moon } from "lucide-react";
+import { Monitor, Moon, Sun, type LucideIcon } from "lucide-react";
+import type { ThemePreference } from "@/config";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/useTheme";
 
+const PREFERENCE_ICONS: Record<ThemePreference, LucideIcon> = {
+  system: Monitor,
+  light: Sun,
+  dark: Moon,
+};
+
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { preference, setPreference } = useTheme();
+  const PreferenceIcon = PREFERENCE_ICONS[preference];
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggleTheme}
-      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-    >
-      {theme === "dark" ? (
-        <Sun className="h-4 w-4" />
-      ) : (
-        <Moon className="h-4 w-4" />
-      )}
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          aria-label="Choose color theme"
+          aria-haspopup="menu"
+        >
+          <PreferenceIcon className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-40 rounded-xl">
+        <DropdownMenuRadioGroup
+          value={preference}
+          onValueChange={(value) => setPreference(value as ThemePreference)}
+        >
+          <DropdownMenuRadioItem
+            value="system"
+            className="cursor-pointer gap-2 rounded-lg py-2 pr-8 pl-2 [&>span:first-child]:right-2 [&>span:first-child]:left-auto"
+          >
+            <Monitor className="size-4 shrink-0 text-muted-foreground" />
+            System
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="light"
+            className="cursor-pointer gap-2 rounded-lg py-2 pr-8 pl-2 [&>span:first-child]:right-2 [&>span:first-child]:left-auto"
+          >
+            <Sun className="size-4 shrink-0 text-muted-foreground" />
+            Light
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="dark"
+            className="cursor-pointer gap-2 rounded-lg py-2 pr-8 pl-2 [&>span:first-child]:right-2 [&>span:first-child]:left-auto"
+          >
+            <Moon className="size-4 shrink-0 text-muted-foreground" />
+            Dark
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
