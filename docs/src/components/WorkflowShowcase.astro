@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Braces from 'lucide-astro/Braces';
 import Monitor from 'lucide-astro/Monitor';
 import Settings from 'lucide-astro/Settings';
@@ -124,10 +125,12 @@ const workflowSteps = [
                 aria-hidden="true"
               >
                 <div class="site-camera">
-                  <img
+                  <Image
                     class="site-shot"
                     src="/images/workflow/ilovepdf-example.webp"
                     alt=""
+                    width={1919}
+                    height={969}
                     loading="lazy"
                     decoding="async"
                   />
@@ -136,7 +139,15 @@ const workflowSteps = [
                 <div class="demo-popup absolute z-30 flex flex-col overflow-hidden rounded-sm border border-white/15 bg-[#1d1716] text-white shadow-2xl">
                   <div class="demo-popup-header flex items-center justify-between border-b border-white/15 px-4 py-3">
                     <div class="demo-popup-brand flex items-center gap-2">
-                      <img class="size-5 rounded-sm" src="/images/workflow/chameleon-icon.png" alt="" loading="lazy" decoding="async" />
+                      <Image
+                        class="size-5 rounded-sm"
+                        src="/images/workflow/chameleon-icon.png"
+                        alt=""
+                        width={48}
+                        height={48}
+                        loading="lazy"
+                        decoding="async"
+                      />
                       <strong class="demo-popup-title text-base font-semibold text-white">Chameleon</strong>
                     </div>
                     <div class="demo-popup-actions flex items-center gap-1 text-white">
