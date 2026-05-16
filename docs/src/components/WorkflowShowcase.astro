@@ -6,6 +6,126 @@ import Settings from 'lucide-astro/Settings';
 
 import { WORKFLOW_STEP_DURATION_MS } from '../../../src/config';
 
+const workflowStepDurationSeconds = WORKFLOW_STEP_DURATION_MS / 1000;
+const toKeyframePercent = (seconds: number) =>
+  `${Number(((seconds / workflowStepDurationSeconds) * 100).toFixed(3))}%`;
+
+const workflowDemoTimingSeconds = {
+  startHoldEnd: 0.4,
+  zoomEnd: 1.5,
+  extensionClickStart: 1.85,
+  extensionClickPeak: 1.875,
+  extensionClickEnd: 2.15,
+  popupEnterEnd: 2.55,
+  settingsMoveEnd: 4.56,
+  settingsHoverStart: 4.56,
+  settingsHoverMid: 4.71,
+  settingsHoverEnd: 4.8,
+  settingsClickHidden: 4.98,
+  settingsClickPeak: 5.01,
+  settingsClickEnd: 5.25,
+} as const;
+
+const workflowDemoTiming = Object.fromEntries(
+  Object.entries(workflowDemoTimingSeconds).map(([name, seconds]) => [
+    name,
+    toKeyframePercent(seconds),
+  ]),
+) as Record<keyof typeof workflowDemoTimingSeconds, string>;
+
+const workflowDemoAnimationStyles = `
+  @keyframes site-camera-zoom {
+    /* 0.40s hold, then zoom to the toolbar without exposing blank space. */
+    0%,
+    ${workflowDemoTiming.startHoldEnd} {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    ${workflowDemoTiming.zoomEnd},
+    100% {
+      transform: translate3d(-98%, 0, 0) scale(2.15);
+    }
+  }
+
+  @keyframes demo-cursor-path {
+    /* The cursor visits the extension icon first, then the popup settings icon. */
+    0%,
+    ${workflowDemoTiming.startHoldEnd} {
+      opacity: 1;
+      transform: translate3d(var(--cursor-start-x), var(--cursor-start-y), 0);
+    }
+
+    ${workflowDemoTiming.zoomEnd},
+    ${workflowDemoTiming.popupEnterEnd} {
+      opacity: 1;
+      transform: translate3d(var(--extension-screen-x), var(--extension-screen-y), 0);
+    }
+
+    ${workflowDemoTiming.settingsMoveEnd},
+    100% {
+      opacity: 1;
+      transform: translate3d(var(--settings-screen-x), var(--settings-screen-y), 0);
+    }
+  }
+
+  @keyframes cursor-click-burst {
+    /* Burst windows line up with the extension click and the settings click. */
+    0%,
+    ${workflowDemoTiming.extensionClickStart},
+    ${workflowDemoTiming.extensionClickEnd},
+    ${workflowDemoTiming.settingsClickHidden},
+    ${workflowDemoTiming.settingsClickEnd},
+    100% {
+      opacity: 0;
+      transform: translate3d(-50%, -50%, 0) scale(0.72);
+    }
+
+    ${workflowDemoTiming.extensionClickPeak},
+    ${workflowDemoTiming.settingsClickPeak} {
+      opacity: 0.95;
+      transform: translate3d(-50%, -50%, 0) scale(0.72);
+    }
+
+    ${workflowDemoTiming.extensionClickEnd},
+    ${workflowDemoTiming.settingsClickEnd} {
+      opacity: 0;
+      transform: translate3d(-50%, -50%, 0) scale(1.22);
+    }
+  }
+
+  @keyframes demo-popup-enter {
+    /* The popup appears right after the extension click and stays for the handoff. */
+    0%,
+    ${workflowDemoTiming.extensionClickEnd} {
+      opacity: 0;
+      transform: translate3d(0, -0.75rem, 0) scale(0.985);
+    }
+
+    ${workflowDemoTiming.popupEnterEnd},
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes demo-settings-hover {
+    /* Simulates the real hover state before the click burst fires. */
+    0%,
+    ${workflowDemoTiming.settingsHoverStart} {
+      opacity: 0;
+    }
+
+    ${workflowDemoTiming.settingsHoverMid} {
+      opacity: 0.72;
+    }
+
+    ${workflowDemoTiming.settingsHoverEnd},
+    100% {
+      opacity: 1;
+    }
+  }
+`;
+
 const workflowSteps = [
   {
     title: 'Pick a website',
@@ -72,6 +192,8 @@ const workflowSteps = [
   },
 ];
 ---
+
+<style is:inline set:html={workflowDemoAnimationStyles}></style>
 
 <section
   class="workflow rounded-lg border border-border bg-card p-5"
@@ -432,6 +554,7 @@ const workflowSteps = [
   }
 
   .site-to-popup-demo {
+    /* Base coordinates target the source image; screen coordinates target the zoomed frame. */
     --extension-base-x: 80.016%;
     --extension-base-y: 2.528%;
     --extension-screen-x: 74%;
@@ -442,6 +565,7 @@ const workflowSteps = [
     --settings-screen-y: calc(var(--popup-top) + 1.875rem);
     --cursor-start-x: 38%;
     --cursor-start-y: 58%;
+    /* The animated element is moved by its cursor tip, not by the SVG box corner. */
     --cursor-tip-x: 0.32rem;
     --cursor-tip-y: 0.14rem;
     --cursor-scale: 0.96;
@@ -788,98 +912,6 @@ const workflowSteps = [
   @keyframes workflow-progress {
     to {
       transform: scaleX(1);
-    }
-  }
-
-  @keyframes site-camera-zoom {
-    0%,
-    6.667% {
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-
-    25%,
-    100% {
-      transform: translate3d(-98%, 0, 0) scale(2.15);
-    }
-  }
-
-  @keyframes demo-cursor-path {
-    0%,
-    6.667% {
-      opacity: 1;
-      transform: translate3d(var(--cursor-start-x), var(--cursor-start-y), 0);
-    }
-
-    25%,
-    30.833% {
-      opacity: 1;
-      transform: translate3d(var(--extension-screen-x), var(--extension-screen-y), 0);
-    }
-
-    35.833%,
-    66.667% {
-      opacity: 1;
-      transform: translate3d(var(--extension-screen-x), var(--extension-screen-y), 0);
-    }
-
-    76%,
-    100% {
-      opacity: 1;
-      transform: translate3d(var(--settings-screen-x), var(--settings-screen-y), 0);
-    }
-  }
-
-  @keyframes cursor-click-burst {
-    0%,
-    30.833%,
-    35.833%,
-    82.999%,
-    87.5%,
-    100% {
-      opacity: 0;
-      transform: translate3d(-50%, -50%, 0) scale(0.72);
-    }
-
-    31.25%,
-    83.5% {
-      opacity: 0.95;
-      transform: translate3d(-50%, -50%, 0) scale(0.72);
-    }
-
-    35.833%,
-    87.5% {
-      opacity: 0;
-      transform: translate3d(-50%, -50%, 0) scale(1.22);
-    }
-  }
-
-  @keyframes demo-popup-enter {
-    0%,
-    35.833% {
-      opacity: 0;
-      transform: translate3d(0, -0.75rem, 0) scale(0.985);
-    }
-
-    42.5%,
-    100% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-  }
-
-  @keyframes demo-settings-hover {
-    0%,
-    75.999% {
-      opacity: 0;
-    }
-
-    78.5% {
-      opacity: 0.72;
-    }
-
-    80%,
-    100% {
-      opacity: 1;
     }
   }
 
