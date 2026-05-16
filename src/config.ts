@@ -10,6 +10,7 @@ export const THEME_STORAGE_KEY = "chameleon_theme";
 export const THEME_PREFERENCES = ["system", "light", "dark"] as const;
 export const THEME_SHOCKWAVE_DURATION_MS = 720;
 export const WORKFLOW_STEP_DURATION_MS = 4000;
+export const WORKFLOW_PANEL_TRANSITION_MS = 360;
 export type ThemePreference = (typeof THEME_PREFERENCES)[number];
 export type ResolvedTheme = "light" | "dark";
 

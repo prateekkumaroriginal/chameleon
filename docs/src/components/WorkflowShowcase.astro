@@ -4,7 +4,7 @@ import Braces from 'lucide-astro/Braces';
 import Monitor from 'lucide-astro/Monitor';
 import Settings from 'lucide-astro/Settings';
 
-import { WORKFLOW_STEP_DURATION_MS } from '../../../src/config';
+import { WORKFLOW_PANEL_TRANSITION_MS, WORKFLOW_STEP_DURATION_MS } from '../../../src/config';
 
 const workflowStepDurationSeconds = WORKFLOW_STEP_DURATION_MS / 1000;
 const toKeyframePercent = (seconds: number) =>
@@ -197,9 +197,11 @@ const workflowSteps = [
 
 <section
   class="workflow rounded-lg border border-border bg-card p-5"
-  style={`--workflow-step-duration: ${WORKFLOW_STEP_DURATION_MS}ms`}
+  style={`--workflow-step-duration: ${WORKFLOW_STEP_DURATION_MS}ms; --workflow-panel-transition-duration: ${WORKFLOW_PANEL_TRANSITION_MS}ms; --active-index: 0; --track-offset: 0px;`}
   data-workflow-tabs
   data-interval={WORKFLOW_STEP_DURATION_MS}
+  data-panel-transition-duration={WORKFLOW_PANEL_TRANSITION_MS}
+  data-transition-direction="forward"
 >
   <div class="workflow-tabs" role="tablist" aria-orientation="vertical" aria-label="Saved fix workflow">
     {
@@ -224,6 +226,7 @@ const workflowSteps = [
   </div>
 
   <div class="workflow-panels">
+    <div class="workflow-panel-track" data-workflow-panel-track>
     {
       workflowSteps.map((step, index) => (
         <article
@@ -232,7 +235,8 @@ const workflowSteps = [
           role="tabpanel"
           aria-labelledby={`workflow-tab-${index}`}
           data-workflow-panel
-          hidden={index !== 0}
+          data-panel-state={index === 0 ? 'active' : 'idle'}
+          aria-hidden={index === 0 ? 'false' : 'true'}
         >
           <div class="panel-copy">
             <span>{step.eyebrow}</span>
@@ -357,38 +361,122 @@ const workflowSteps = [
         </article>
       ))
     }
+    </div>
   </div>
 </section>
 
 <script>
-  const workflows = document.querySelectorAll('[data-workflow-tabs]');
+  const workflows = document.querySelectorAll<HTMLElement>('[data-workflow-tabs]');
 
   workflows.forEach((workflow) => {
     const tabs = Array.from(workflow.querySelectorAll('[data-workflow-tab]')) as HTMLElement[];
     const panels = Array.from(workflow.querySelectorAll('[data-workflow-panel]')) as HTMLElement[];
+    const panelTrack = workflow.querySelector('[data-workflow-panel-track]') as HTMLElement | null;
     const interval = Number(workflow.getAttribute('data-interval')) || 8000;
+    const panelTransitionDuration =
+      Number(workflow.getAttribute('data-panel-transition-duration')) || 360;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let activeIndex = 0;
+    let transitionTimeout = 0;
     let timer = window.setInterval(showNextTab, interval);
 
-    function activateTab(index: number) {
-      activeIndex = index;
+    function setTrackPosition(index: number, panelHeight: number) {
+      workflow.style.setProperty('--active-index', String(index));
+      workflow.style.setProperty('--track-offset', `${index * panelHeight * -1}px`);
+    }
 
+    function setPanelHeight() {
+      if (!panels.length) {
+        return;
+      }
+
+      const panelHeight = Math.max(...panels.map((panel) => panel.scrollHeight));
+
+      workflow.style.setProperty('--workflow-panel-height', `${panelHeight}px`);
+      setTrackPosition(activeIndex, panelHeight);
+    }
+
+    function setActiveTab(index: number) {
       tabs.forEach((tab, tabIndex) => {
-        const isActive = tabIndex === activeIndex;
+        const isActive = tabIndex === index;
 
         tab.setAttribute('aria-selected', String(isActive));
         tab.setAttribute('tabindex', isActive ? '0' : '-1');
       });
+    }
 
+    function setPanelStates(index: number) {
       panels.forEach((panel, panelIndex) => {
-        panel.hidden = panelIndex !== activeIndex;
+        const isActive = panelIndex === index;
+
+        panel.dataset.panelState = isActive ? 'active' : 'idle';
+        panel.setAttribute('aria-hidden', String(!isActive));
       });
+    }
+
+    function restartPanelAnimations(panel: HTMLElement) {
+      panel.dataset.animationState = 'reset';
+      void panel.offsetWidth;
+
+      window.requestAnimationFrame(() => {
+        delete panel.dataset.animationState;
+      });
+    }
+
+    function getTransitionDirection(index: number, isAutoAdvance = false) {
+      const isLoopingToFirst = isAutoAdvance && activeIndex === tabs.length - 1 && index === 0;
+
+      if (isLoopingToFirst) {
+        return 'reverse';
+      }
+
+      return index > activeIndex ? 'forward' : 'reverse';
+    }
+
+    function activateTab(index: number, isAutoAdvance = false) {
+      if (!panelTrack) {
+        return;
+      }
+
+      if (index === activeIndex) {
+        restartTimer();
+        return;
+      }
+
+      const direction = getTransitionDirection(index, isAutoAdvance);
+      window.clearTimeout(transitionTimeout);
+      setPanelHeight();
+      workflow.dataset.transitionDirection = direction;
+      activeIndex = index;
+      setTrackPosition(activeIndex, Math.max(...panels.map((panel) => panel.scrollHeight)));
+      setActiveTab(activeIndex);
+      restartPanelAnimations(panels[activeIndex]);
+
+      if (prefersReducedMotion.matches) {
+        setPanelStates(activeIndex);
+        restartTimer();
+        return;
+      }
+
+      transitionTimeout = window.setTimeout(() => {
+        setPanelStates(activeIndex);
+      }, panelTransitionDuration);
 
       restartTimer();
     }
 
+    setPanelHeight();
+    setActiveTab(activeIndex);
+    setPanelStates(activeIndex);
+
+    if ('ResizeObserver' in window) {
+      const resizeObserver = new ResizeObserver(setPanelHeight);
+
+      panels.forEach((panel) => resizeObserver.observe(panel));
+    }
+
     function showNextTab() {
-      activateTab((activeIndex + 1) % tabs.length);
+      activateTab((activeIndex + 1) % tabs.length, true);
     }
 
     function restartTimer() {
@@ -513,18 +601,41 @@ const workflowSteps = [
   }
 
   .workflow-panels {
+    overflow: hidden;
+    height: var(--workflow-panel-height, auto);
     min-width: 0;
     flex: 1 1 auto;
   }
 
-  .workflow-panel {
+  .workflow-panel-track {
     display: flex;
+    height: 100%;
     flex-direction: column;
-    gap: 1rem;
+    transform: translate3d(0, var(--track-offset), 0);
+    transition: transform var(--workflow-panel-transition-duration) ease-in-out;
+    will-change: transform;
   }
 
-  .workflow-panel[hidden] {
-    display: none;
+  .workflow-panel {
+    display: flex;
+    height: var(--workflow-panel-height, auto);
+    min-height: var(--workflow-panel-height, auto);
+    flex: 0 0 var(--workflow-panel-height, auto);
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .workflow-panel[data-panel-state='idle'] {
+    pointer-events: none;
+  }
+
+  .workflow-panel[data-animation-state='reset'] .site-camera,
+  .workflow-panel[data-animation-state='reset'] .demo-popup,
+  .workflow-panel[data-animation-state='reset'] .demo-cursor-motion,
+  .workflow-panel[data-animation-state='reset'] .cursor-click-burst,
+  .workflow-panel[data-animation-state='reset'] .demo-settings-button::before {
+    animation: none;
   }
 
   .panel-copy {
@@ -934,10 +1045,6 @@ const workflowSteps = [
       flex: 0 0 auto;
     }
 
-    .workflow-panel {
-      min-height: 100%;
-    }
-
     .mockups {
       flex-direction: row;
       align-items: stretch;
@@ -987,6 +1094,10 @@ const workflowSteps = [
     .workflow-tab[aria-selected='true'] .workflow-tab-progress::before {
       animation: none;
       transform: scaleX(1);
+    }
+
+    .workflow-panel-track {
+      transition: none;
     }
 
     .site-camera,
