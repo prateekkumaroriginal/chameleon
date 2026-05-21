@@ -378,7 +378,8 @@ const workflowSteps = [
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let activeIndex = 0;
     let transitionTimeout = 0;
-    let timer = window.setInterval(showNextTab, interval);
+    let timer = 0;
+    let isWorkflowVisible = false;
 
     function setTrackPosition(index: number, panelHeight: number) {
       workflow.style.setProperty('--active-index', String(index));
@@ -420,6 +421,17 @@ const workflowSteps = [
 
       window.requestAnimationFrame(() => {
         delete panel.dataset.animationState;
+      });
+    }
+
+    function restartWorkflowAnimations() {
+      workflow.dataset.animationState = 'reset';
+      panels[activeIndex].dataset.animationState = 'reset';
+      void workflow.offsetWidth;
+
+      window.requestAnimationFrame(() => {
+        delete workflow.dataset.animationState;
+        delete panels[activeIndex].dataset.animationState;
       });
     }
 
@@ -478,9 +490,37 @@ const workflowSteps = [
       activateTab((activeIndex + 1) % tabs.length, true);
     }
 
-    function restartTimer() {
-      window.clearInterval(timer);
+    function startTimer() {
+      if (timer) {
+        return;
+      }
+
       timer = window.setInterval(showNextTab, interval);
+    }
+
+    function stopTimer() {
+      window.clearInterval(timer);
+      timer = 0;
+    }
+
+    function restartTimer() {
+      stopTimer();
+
+      if (isWorkflowVisible) {
+        startTimer();
+      }
+    }
+
+    function resetWorkflow() {
+      window.clearTimeout(transitionTimeout);
+      activeIndex = 0;
+      workflow.dataset.transitionDirection = 'forward';
+      setPanelHeight();
+      setTrackPosition(activeIndex, Math.max(...panels.map((panel) => panel.scrollHeight)));
+      setActiveTab(activeIndex);
+      setPanelStates(activeIndex);
+      restartWorkflowAnimations();
+      restartTimer();
     }
 
     tabs.forEach((tab, index) => {
@@ -503,6 +543,32 @@ const workflowSteps = [
         activateTab(nextIndex);
       });
     });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          const isVisible = Boolean(entry?.isIntersecting);
+
+          if (isVisible && !isWorkflowVisible) {
+            isWorkflowVisible = true;
+            resetWorkflow();
+            return;
+          }
+
+          if (!isVisible && isWorkflowVisible) {
+            isWorkflowVisible = false;
+            stopTimer();
+          }
+        },
+        { threshold: 0.3 },
+      );
+
+      observer.observe(workflow);
+    } else {
+      isWorkflowVisible = true;
+      restartWorkflowAnimations();
+      startTimer();
+    }
   });
 </script>
 
@@ -592,6 +658,10 @@ const workflowSteps = [
 
   .workflow-tab[aria-selected='true'] .workflow-tab-progress::before {
     animation: workflow-progress var(--workflow-step-duration) linear forwards;
+  }
+
+  .workflow[data-animation-state='reset'] .workflow-tab[aria-selected='true'] .workflow-tab-progress::before {
+    animation: none;
   }
 
   .workflow-tab[aria-selected='true'] .workflow-tab-progress {
