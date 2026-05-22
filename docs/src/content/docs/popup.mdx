@@ -1,0 +1,42 @@
+---
+title: Popup Controls
+description: Use the toolbar popup to manage styles for the current website.
+---
+
+The popup is the quick control surface for the website in your active tab. It reads the current tab URL, extracts the hostname, and lists saved rules and palettes that match that host.
+
+## Current Site Detection
+
+When the popup opens, Chameleon asks Chrome for the active tab in the current window. If the tab has a normal URL, Chameleon displays the hostname as a badge.
+
+If Chrome does not provide a usable website URL, the popup cannot show matching rules for that page.
+
+## Empty State
+
+If the current website has no matching rules or palettes, the popup shows an empty state with a **Create a Rule** action. Use it to open the options page and add a rule.
+
+## Rule Toggles
+
+Matching rules appear in the popup with an enabled switch. Turning a rule off keeps it saved but stops it from injecting CSS. Turning it on applies it again when the domain matches.
+
+Use popup toggles for temporary changes. Use the full options page when you need to edit the CSS or change the domain.
+
+## Palette Controls
+
+Matching palettes appear after rules. You can:
+
+- Enable or disable the palette.
+- Pick the active variant.
+
+Only the active variant's CSS is injected. Disabled palettes and archived palettes do not apply.
+
+## Why A Rule May Not Show
+
+A saved rule or palette appears in the popup only when its domain matches the current hostname and it is not archived.
+
+Check these cases:
+
+- A rule for `example.com` appears on `docs.example.com`.
+- A rule for `docs.example.com` does not appear on `example.com`.
+- A rule for `*` appears on normal websites.
+- Archived rules and palettes stay out of the active popup list.

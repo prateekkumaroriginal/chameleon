@@ -1,0 +1,59 @@
+---
+title: Privacy and Storage
+description: Understand what Chameleon stores locally and how saved CSS is applied.
+---
+
+Chameleon stores rules, palettes, and theme preference in Chrome local extension storage. The current implementation does not use a backend service or cloud sync.
+
+## What Is Stored
+
+Chameleon stores rule data:
+
+- Rule name.
+- Domain.
+- CSS text.
+- Enabled state.
+- Archived state.
+- Created and updated timestamps.
+
+It also stores palette data:
+
+- Palette name.
+- Domain.
+- Enabled state.
+- Active variant.
+- Variant names and CSS text.
+- Archived state.
+- Created and updated timestamps.
+
+## Where It Is Stored
+
+Rules are saved under the local storage key `chameleon_rules`. Palettes are saved under `chameleon_palettes`. The docs theme preference and extension theme preference use their own local preference keys.
+
+This data is stored by Chrome for the extension. Chameleon reads it when showing the popup, rendering the options page, and applying styles to websites.
+
+## How CSS Is Applied
+
+Chameleon registers a content script for normal web pages. On a matching page, it:
+
+1. Reads saved rules and palettes from local extension storage.
+2. Checks the current page hostname.
+3. Finds enabled, non-archived rules and palettes that match the hostname.
+4. Adds a `<style>` element to the page for each matching rule or active palette variant.
+5. Removes injected styles when a saved item no longer matches or is disabled.
+
+The content script also listens for local storage changes, so edits can update open matching pages after you save.
+
+## What Chameleon Does Not Do
+
+The current implementation does not:
+
+- Send saved CSS to a Chameleon server.
+- Sync rules between browsers by itself.
+- Apply archived rules or archived palettes.
+- Apply disabled rules or disabled palettes.
+- Apply every palette variant at once.
+
+## Be Careful With Saved CSS
+
+CSS can hide content, change layouts, and make forms harder to use if a selector is too broad. Keep important rules targeted, and disable or archive styles that no longer match a redesigned site.

@@ -1,14 +1,18 @@
 ---
 title: Chameleon
-description: Inject custom CSS stylesheets into any webpage.
+description: A Chrome extension for writing, saving, and toggling custom CSS per website.
 template: splash
 hero:
-  tagline: A Chrome extension that lets you inject custom CSS stylesheets into any webpage. Style the web your way.
+  tagline: Customize any website with your own CSS. Create per-domain rules, preview changes instantly, and toggle styles from the browser popup.
   actions:
     - text: Get Started
       link: /getting-started/
       icon: right-arrow
       variant: primary
+    - text: Browse CSS Recipes
+      link: /css-recipes/
+      icon: seti:css
+      variant: secondary
     - text: View on GitHub
       link: https://github.com/user/chameleon
       icon: external
@@ -17,20 +21,100 @@ hero:
 
 import ChameleonCard from '../../components/ChameleonCard.astro';
 import ChameleonCardGrid from '../../components/ChameleonCardGrid.astro';
+import ChameleonBento from '../../components/ChameleonBento.astro';
+import CSSExamplePanel from '../../components/CSSExamplePanel.astro';
+import ScenarioBlocks from '../../components/ScenarioBlocks.astro';
+import UseCaseMatrix from '../../components/UseCaseMatrix.astro';
+import WorkflowShowcase from '../../components/WorkflowShowcase.astro';
 
-## Features
+## Customize Websites Without Touching DevTools
+
+Chameleon lets you write CSS once, save it to a domain, and have it apply automatically whenever you visit that site. Use it to fix annoying layouts, restyle apps you use every day, hide clutter, or create quick personal themes.
+
+## What You Can Do
+
+<UseCaseMatrix
+  items={[
+    {
+      problem: 'Tiny or low-contrast text',
+      fix: 'Increase font size, line height, and foreground colors.',
+    },
+    {
+      problem: 'Distracting sidebars or promos',
+      fix: 'Hide clutter with saved CSS rules.',
+    },
+    {
+      problem: 'Dashboards that are hard to scan',
+      fix: 'Adjust spacing, widths, sticky headers, and table density.',
+    },
+    {
+      problem: 'Repeated manual DevTools tweaks',
+      fix: 'Save the CSS once and apply it automatically.',
+    },
+    {
+      problem: 'Different themes for different workflows',
+      fix: 'Group related rules into palettes and switch between them.',
+    },
+  ]}
+/>
+
+## Built For Everyday Website Tweaks
+
+<ChameleonBento />
+
+## Turn A Recurring Tweak Into A Saved Rule
+
+<CSSExamplePanel
+  title="Save the CSS you keep rewriting"
+  description="Instead of reopening DevTools every time, turn the tweak into a rule that follows the site."
+>
+  <pre><code>{`/* Make dense pages easier to read */
+main {
+  max-width: 72ch !important;
+  line-height: 1.7 !important;
+}
+
+aside,
+[data-testid="promo"] {
+  display: none !important;
+}`}</code></pre>
+</CSSExamplePanel>
+
+## From One Annoying Page To A Saved Fix
+
+<WorkflowShowcase />
+
+## Common Ways People Use It
+
+<ScenarioBlocks />
+
+## Save Site Preferences
 
 <ChameleonCardGrid>
-  <ChameleonCard title="Per-Domain Rules" icon="pencil">
-    Create CSS rules that apply only to specific domains or globally across all sites.
+  <ChameleonCard title="Theme Mismatched Sites" icon="contrast">
+    Save dark mode for sites that only have light mode, or save a light mode for sites that only have dark mode.
   </ChameleonCard>
-  <ChameleonCard title="Live Editing" icon="seti:css">
-    Edit CSS with a full-featured CodeMirror editor with syntax highlighting and autocomplete.
+  <ChameleonCard title="Tune Reading Comfort" icon="pencil">
+    Keep preferred type sizes, line heights, content widths, and spacing rules attached to the site where they matter.
   </ChameleonCard>
-  <ChameleonCard title="Quick Toggle" icon="approve-check">
-    Enable or disable stylesheets instantly from the popup without opening the full editor.
+  <ChameleonCard title="Remove Repeat Friction" icon="switch">
+    Turn recurring one-off CSS fixes into reusable rules you can enable, pause, or adjust later.
   </ChameleonCard>
-  <ChameleonCard title="Palettes" icon="star">
-    Group related styles into palettes and apply them with a single click.
+</ChameleonCardGrid>
+
+## How It Works
+
+<ChameleonCardGrid>
+  <ChameleonCard title="Pick a Website" icon="globe">
+    Create a rule for the current domain, a specific site, or every website with a global rule. See the <a href="/rules/">rules guide</a> for domain matching details.
+  </ChameleonCard>
+  <ChameleonCard title="Write Your CSS" icon="seti:css">
+    Add the styles you want in a dedicated editor built for writing and managing CSS rules. Start with the <a href="/css-recipes/">CSS recipes</a> when you need examples.
+  </ChameleonCard>
+  <ChameleonCard title="Toggle Anytime" icon="switch">
+    Enable or disable saved styles from the popup without deleting them or reloading your setup. The <a href="/popup/">popup guide</a> explains the current-site controls.
+  </ChameleonCard>
+  <ChameleonCard title="Keep Styles Organized" icon="star">
+    Group related rules into palettes when you want to switch between full site themes. Read the <a href="/palettes/">palettes guide</a> for variants.
   </ChameleonCard>
 </ChameleonCardGrid>
