@@ -1,0 +1,59 @@
+---
+title: Palettes
+description: Use palettes to switch between multiple CSS variants for the same website.
+---
+
+A palette is a set of CSS variants for one domain. Only one variant is active at a time, which makes palettes useful for switching a site between different saved looks.
+
+## When To Use A Palette
+
+Use a palette when the same website needs multiple modes:
+
+- A compact dashboard and a spacious dashboard.
+- A light variant and a dark variant.
+- A reading variant and a work variant.
+- A high-contrast variant and a softer variant.
+
+Use a normal rule when you only need one saved stylesheet.
+
+## Palette Fields
+
+Each palette has:
+
+- **Name**: a label for the set, such as `GitHub layouts`.
+- **Domain**: the host where the palette applies.
+- **Enabled**: whether the active variant should inject.
+- **Variants**: two or more CSS stylesheets.
+- **Active variant**: the variant currently injected on matching pages.
+
+New palettes start with two variants because a palette is only useful when there is something to switch between.
+
+## Create A Palette
+
+1. Open the options page.
+2. Go to the **Palettes** tab.
+3. Create a new palette.
+4. Enter a name and domain.
+5. Keep at least two variants.
+6. Give each variant a clear name.
+7. Add CSS to each variant.
+8. Save.
+
+Example variant names:
+
+- `Comfort`
+- `Compact`
+- `Dim`
+- `High contrast`
+
+## Switch Variants From The Popup
+
+When you are on a website that matches an enabled palette, the popup shows the palette under the current site. Use the variant control to choose which saved CSS variant is active.
+
+Chameleon stores the active variant with the palette. The matching page receives the active variant CSS when the palette is enabled.
+
+## Archive Or Restore A Palette
+
+Archiving a palette disables it and removes it from the active palette list. Archived palettes do not inject CSS.
+
+Restoring a palette keeps it disabled. Review the variants before turning it back on, especially if the website has changed since you archived it.

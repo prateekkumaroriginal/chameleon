@@ -1,0 +1,51 @@
+---
+import DocsNavLinks from './DocsNavLinks.astro';
+
+interface PaginationLink {
+  title: string;
+  href: string;
+  description: string;
+  rel: 'prev' | 'next';
+}
+
+const pageDescriptions: Record<string, string> = {
+  '/getting-started/': 'Load Chameleon, create your first CSS rule, and confirm it applies.',
+  '/rules/': 'Learn rule fields, domain matching, toggles, editing, and archiving.',
+  '/palettes/': 'Switch between multiple CSS variants for the same website.',
+  '/popup/': 'Manage matching rules and palettes from the current website.',
+  '/css-recipes/': 'Copy practical snippets for common website fixes.',
+  '/troubleshooting/': 'Fix CSS injection, matching, selector, and extension reload issues.',
+  '/privacy-and-storage/': 'See what Chameleon stores locally and how CSS is applied.',
+};
+
+const { pagination } = Astro.locals.starlightRoute;
+const { prev, next } = pagination;
+
+const links: PaginationLink[] = [];
+
+if (prev) {
+  links.push({
+    title: prev.label,
+    href: prev.href,
+    description: pageDescriptions[prev.href] ?? Astro.locals.t('page.previousLink'),
+    rel: 'prev',
+  });
+}
+
+if (next) {
+  links.push({
+    title: next.label,
+    href: next.href,
+    description: pageDescriptions[next.href] ?? Astro.locals.t('page.nextLink'),
+    rel: 'next',
+  });
+}
+---
+
+{
+  links.length > 0 && (
+    <div class="print:hidden">
+      <DocsNavLinks links={links} ariaLabel="Page navigation" />
+    </div>
+  )
+}

@@ -1,0 +1,70 @@
+---
+title: Troubleshooting
+description: Fix common issues with CSS injection, matching, selectors, and extension pages.
+---
+
+Use this checklist when a saved style does not appear on the page.
+
+## Confirm The Rule Can Apply
+
+Check these first:
+
+1. The rule or palette is enabled.
+2. The rule or palette is not archived.
+3. The current hostname matches the saved domain.
+4. The page is a normal website.
+5. The CSS selector matches something on the page.
+
+Chrome internal pages such as `chrome://extensions` are not normal websites. Extension content scripts do not apply there like they do on regular pages.
+
+## Check Domain Matching
+
+Chameleon matches exact hosts and subdomains:
+
+- `example.com` matches `example.com` and `docs.example.com`.
+- `docs.example.com` does not match `example.com`.
+- `*` matches normal website hostnames.
+
+If a rule is not listed in the popup for the current site, the domain is usually wrong or the item is archived.
+
+## Test With A Visible Debug Rule
+
+Temporarily add this to the rule:
+
+```css
+body {
+  outline: 6px solid red !important;
+}
+```
+
+If the outline appears, Chameleon is injecting the rule. The problem is in your selector or CSS declaration.
+
+If the outline does not appear, check the domain, enabled state, archived state, and whether the page supports extension content scripts.
+
+## Use Stronger Selectors Carefully
+
+Many sites use specific selectors, inline styles, or CSS variables. Start small:
+
+```css
+main article p {
+  font-size: 18px !important;
+  line-height: 1.7 !important;
+}
+```
+
+Prefer targeted selectors over global selectors when you only want to change one part of the page.
+
+## Reload The Page
+
+Open pages listen for Chameleon's local storage changes and should update after you save. If the page still looks stale:
+
+1. Reload the website.
+2. Reopen the popup.
+3. Confirm the matching rule or palette is enabled.
+4. Edit and save the CSS again.
+
+## Reload The Extension After Rebuilding
+
+If you are working from source and rebuild the extension, Chrome may still be running the older loaded extension. Open `chrome://extensions`, find Chameleon, and reload it.
+
+Then reload the target website.

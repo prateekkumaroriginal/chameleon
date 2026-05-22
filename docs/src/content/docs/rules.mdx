@@ -1,0 +1,47 @@
+---
+title: Rules
+description: Create, target, toggle, edit, and archive saved CSS rules.
+---
+
+A rule is one saved CSS stylesheet. Chameleon stores it locally and injects it into pages whose hostname matches the rule domain.
+
+## Rule Fields
+
+Each rule has these fields:
+
+- **Name**: a label for you, such as `GitHub wider code`.
+- **Domain**: the website host the CSS should apply to, such as `github.com`.
+- **Enabled**: whether Chameleon should inject the CSS.
+- **CSS**: the stylesheet text to add to matching pages.
+
+Chameleon also tracks creation and update times internally so rules can be saved and edited later.
+
+## Domain Matching
+
+The domain field accepts a hostname, a URL-like value, or `*`.
+
+| Rule domain | Matches | Does not match |
+| --- | --- | --- |
+| `example.com` | `example.com`, `www.example.com`, `docs.example.com` | `another-example.com` |
+| `docs.example.com` | `docs.example.com`, `v1.docs.example.com` | `example.com` |
+| `*` | Any website hostname | Chrome internal pages |
+
+If you paste a full URL, Chameleon extracts the hostname before matching. For example, `https://docs.example.com/path` becomes `docs.example.com`.
+
+## Enabled And Disabled Rules
+
+Enabled rules inject their CSS into matching pages. Disabled rules stay saved but do not apply.
+
+Use the enabled switch when you want to pause a style without losing the CSS. This is useful for experiments, site redesigns, or styles you only need sometimes.
+
+## Editing Rules
+
+Open the options page, select a rule, change the name, domain, enabled state, or CSS, then save. Matching open pages listen for storage updates, so the changed CSS should be re-applied after the save.
+
+If the old CSS appears to stay on the page, reload the website and confirm the rule still matches the current hostname.
+
+## Archiving Rules
+
+Archive a rule when you want it out of your active list but do not want to delete it. Archived rules do not apply to pages.
+
+When you restore an archived rule, Chameleon keeps it disabled. Turn it back on only after reviewing that the CSS still fits the current version of the site.

@@ -1,0 +1,130 @@
+---
+title: CSS Recipes
+description: Copy practical CSS snippets for common website fixes.
+---
+
+These snippets are starting points. Most websites use their own class names and structure, so inspect the page when a selector is too broad or too narrow.
+
+## Improve Reading Comfort
+
+Use this for articles, docs, and long pages that feel too wide or cramped.
+
+```css
+main,
+article {
+  max-width: 72ch !important;
+  line-height: 1.7 !important;
+  font-size: 1.05rem !important;
+}
+
+p,
+li {
+  max-width: 72ch !important;
+}
+```
+
+## Hide Distracting Blocks
+
+Replace the selectors with the actual sidebar, promo, or ad containers on the site.
+
+```css
+aside,
+[class*="promo"],
+[class*="sponsor"],
+[data-testid*="ad"] {
+  display: none !important;
+}
+```
+
+## Make A Page Wider
+
+Use this when a dashboard or code review view wastes too much horizontal space.
+
+```css
+.container,
+.layout,
+main {
+  max-width: min(1440px, calc(100vw - 48px)) !important;
+  width: 100% !important;
+}
+```
+
+## Create A Compact Dashboard
+
+This reduces spacing and tightens tables without changing page behavior.
+
+```css
+table {
+  font-size: 0.9rem !important;
+}
+
+th,
+td {
+  padding: 0.35rem 0.5rem !important;
+}
+
+.card,
+.panel,
+section {
+  gap: 0.75rem !important;
+}
+```
+
+## Add A Simple Dark Override
+
+This works best on simple pages. Complex apps usually need more targeted selectors.
+
+```css
+html,
+body {
+  background: #111318 !important;
+  color: #eceff4 !important;
+}
+
+a {
+  color: #8ab4ff !important;
+}
+
+input,
+textarea,
+select,
+button {
+  background: #1b1f2a !important;
+  color: #eceff4 !important;
+  border-color: #3b4252 !important;
+}
+```
+
+## Soften A Bright Site
+
+Use this as a light mode adjustment when a site is too stark.
+
+```css
+html,
+body {
+  background: #f7f4ee !important;
+  color: #24211d !important;
+}
+
+main,
+article,
+.content {
+  background: transparent !important;
+}
+
+a {
+  color: #875c16 !important;
+}
+```
+
+## Debug Selector Strength
+
+If a declaration does not apply, test with one obvious change first.
+
+```css
+body {
+  outline: 6px solid red !important;
+}
+```
+
+If you see the outline, the rule is matching the site and your issue is probably selector specificity. If you do not see it, check the domain, enabled state, archived state, and whether the page allows extension content scripts.

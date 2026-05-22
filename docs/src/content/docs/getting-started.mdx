@@ -1,56 +1,69 @@
 ---
 title: Getting Started
-description: Install and start using Chameleon to customize any webpage with CSS.
+description: Load Chameleon, create your first CSS rule, and confirm it applies to a website.
 ---
 
-import DocsNavLinks from '../../components/DocsNavLinks.astro';
+Chameleon applies saved CSS to matching websites. A rule has a name, a domain, CSS text, and an enabled switch. Once saved, matching pages update through the extension content script when the stored rule changes.
 
-## Installation
+## Install Or Load The Extension
 
-1. Download the latest release from the [Chrome Web Store](#) or build from source.
-2. Click the Chameleon icon in your browser toolbar to open the popup.
+If you are using a packaged build, install it through the distribution method provided by the project. If you are working from source, build the extension and load the generated extension in Chrome:
 
-## Creating Your First Rule
+1. Build the extension from the project root.
+2. Open `chrome://extensions`.
+3. Turn on **Developer mode**.
+4. Click **Load unpacked**.
+5. Select the built extension folder.
 
-1. Navigate to any webpage you'd like to style.
-2. Click the Chameleon icon to open the popup.
-3. Click **"New Rule"** to create a CSS rule for the current domain.
-4. Write your CSS in the editor — changes apply instantly.
+After Chameleon is loaded, pin it from Chrome's extensions menu so the popup is easy to open.
+
+## Create Your First Rule
+
+1. Open the website you want to customize.
+2. Click the Chameleon icon in the toolbar.
+3. Click **Create a Rule** if the current site has no saved rules yet, or open the options page from the popup.
+4. Create a new rule.
+5. Enter a clear name, such as `Readable article view`.
+6. Enter the domain you want the rule to match, such as `example.com`.
+7. Keep **Enabled** on.
+8. Add CSS and save.
+
+Use this small rule for a first test:
 
 ```css
-/* Example: Make all links terracotta */
+main {
+  max-width: 72ch !important;
+  line-height: 1.7 !important;
+}
+
 a {
-  color: oklch(0.58 0.17 28) !important;
+  text-decoration-thickness: 0.12em !important;
 }
 ```
 
-## Managing Rules
+Reload the target page if you want to confirm the rule applies from a fresh page load. Chameleon also listens for storage changes, so edits should apply to matching open pages after you save.
 
-- **Toggle** rules on and off from the popup without deleting them.
-- **Edit** rules at any time by clicking on them in the options page.
-- **Archive** rules you don't need right now but want to keep for later.
+## Choose The Right Domain
 
-## Using Palettes
+The domain field controls where a rule runs:
 
-Palettes let you group multiple CSS rules together and apply them as a set:
+- `example.com` matches `example.com` and subdomains such as `docs.example.com`.
+- `docs.example.com` matches that host and its own subdomains.
+- `*` matches every website.
+- Full URLs are cleaned down to their hostname before matching.
 
-1. Open the **Options** page from the popup menu.
-2. Navigate to the **Palettes** tab.
-3. Create a new palette and add your rules to it.
-4. Toggle the entire palette on or off with a single switch.
+Use `*` carefully. A global CSS rule can affect unrelated sites.
 
-## Next Steps
+## Verify The Rule
 
-- Explore the options page for advanced rule management.
-- Use domain-specific rules for targeted styling.
-- Combine rules into palettes for quick theme switching.
+After saving, check these points:
 
-<DocsNavLinks
-  links={[
-    {
-      title: 'Back to Chameleon',
-      href: '/',
-      description: 'Review the main feature overview for the extension.',
-    },
-  ]}
-/>
+- The rule is enabled.
+- The current page hostname matches the rule domain.
+- The CSS selector matches elements on the page.
+- The target page is a normal website, not an internal Chrome page.
+- The CSS is strong enough to override the site's styles.
+
+When a site has strong existing CSS, add `!important` only to the declarations that need it.
+
+Rules are best for one saved style. Palettes are best when you want multiple versions of a site style, such as compact, focus, and dark variants.
