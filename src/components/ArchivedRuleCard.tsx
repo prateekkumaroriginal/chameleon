@@ -1,7 +1,8 @@
 import { RotateCcw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { InteractiveCard } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useDesignMode } from "@/hooks/useDesignMode";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -24,8 +25,10 @@ export function ArchivedRuleCard({
   onRestore,
   onDelete,
 }: ArchivedRuleCardProps) {
-  return (
-    <InteractiveCard className="flex-row items-center justify-between px-4 py-3 gap-0">
+  const { mode } = useDesignMode();
+
+  const content = (
+    <>
       <div className="flex-1 min-w-0 mr-4">
         <div className="flex items-center gap-2">
           <p className="font-medium truncate">{rule.name}</p>
@@ -50,7 +53,13 @@ export function ArchivedRuleCard({
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="destructive" size="sm">
+            <Button
+              variant={mode === "boring" ? "ghost" : "destructive"}
+              size="sm"
+              className={cn(
+                mode === "boring" && "text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20"
+              )}
+            >
               <Trash2 className="h-3.5 w-3.5 mr-1.5" />
               Delete
             </Button>
@@ -74,6 +83,20 @@ export function ArchivedRuleCard({
           </DialogContent>
         </Dialog>
       </div>
-    </InteractiveCard>
+    </>
+  );
+
+  if (mode === "boring") {
+    return (
+      <div className="flex items-center gap-3">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center justify-between px-4 py-3 bg-card rounded-xl border shadow-sm">
+      {content}
+    </div>
   );
 }

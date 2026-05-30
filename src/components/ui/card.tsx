@@ -2,13 +2,18 @@ import * as React from "react"
 import { useState, useCallback } from "react"
 
 import { cn } from "@/lib/utils"
+import { useDesignMode } from "@/hooks/useDesignMode"
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
+  const { mode } = useDesignMode()
+
   return (
     <div
       data-slot="card"
       className={cn(
         "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        mode === "boring" && "transition-[box-shadow,border-color,transform] duration-200",
+        mode === "boring" && "dark:shadow-[0_4px_16px_-4px_oklch(0_0_0/0.4)]",
         className
       )}
       {...props}
@@ -21,6 +26,7 @@ function InteractiveCard({
   children,
   ...props
 }: React.ComponentProps<"div">) {
+  const { mode } = useDesignMode()
   const [gradientPos, setGradientPos] = useState({ x: 50, y: 50 })
   const [isHovered, setIsHovered] = useState(false)
 
@@ -38,8 +44,10 @@ function InteractiveCard({
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground relative flex flex-col gap-6 rounded-xl border py-6 shadow-sm overflow-hidden transition-[border-color] duration-200",
+        "bg-card text-card-foreground relative flex rounded-xl border shadow-sm overflow-hidden transition-[border-color] duration-200",
         "hover:border-primary/25",
+        mode === "boring" && "transition-[box-shadow,border-color,transform] duration-200",
+        mode === "boring" && "dark:shadow-[0_4px_16px_-4px_oklch(0_0_0/0.4)]",
         className
       )}
       onMouseMove={handleMouseMove}

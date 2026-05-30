@@ -3,6 +3,7 @@ import { Plus, Archive, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/PageHeader";
+import { GroupedList, GroupedListItem } from "@/components/ui/grouped-list";
 import {
   Empty,
   EmptyHeader,
@@ -12,10 +13,12 @@ import {
 } from "@/components/ui/empty";
 import { PaletteCard } from "@/components/PaletteCard";
 import { usePalettes } from "@/hooks/usePalettes";
+import { useDesignMode } from "@/hooks/useDesignMode";
 
 export function PalettesList() {
   const { palettes, loading, toggle } = usePalettes();
   const navigate = useNavigate();
+  const { mode } = useDesignMode();
 
   return (
     <div className="space-y-6">
@@ -36,7 +39,7 @@ export function PalettesList() {
         }
       />
 
-      <Separator />
+      {mode === "awesome" && <Separator />}
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
@@ -57,6 +60,18 @@ export function PalettesList() {
             </Button>
           </EmptyContent>
         </Empty>
+      ) : mode === "boring" ? (
+        <GroupedList>
+          {palettes.map((palette) => (
+            <GroupedListItem key={palette.id}>
+              <PaletteCard
+                palette={palette}
+                onToggle={toggle}
+                onClick={() => navigate(`/palettes/edit/${palette.id}`)}
+              />
+            </GroupedListItem>
+          ))}
+        </GroupedList>
       ) : (
         <div className="space-y-2">
           {palettes.map((palette) => (

@@ -5,10 +5,14 @@ import { ArchivedList } from "./pages/ArchivedList";
 import { PaletteEditor } from "./pages/PaletteEditor";
 import { ArchivedPalettesList } from "./pages/ArchivedPalettesList";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useDesignMode } from "@/hooks/useDesignMode";
+import { cn } from "@/lib/utils";
 import { APP_NAME } from "@/config";
 import iconUrl from "@/assets/icon-48.png";
 
 export function Options() {
+  const { mode } = useDesignMode();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -22,7 +26,11 @@ export function Options() {
       </header>
 
       {/* Content */}
-      <main className="mx-auto px-6 py-6 max-w-4xl">
+      <main className={cn(
+        "mx-auto py-6",
+        mode === "awesome" && "max-w-4xl px-6",
+        mode === "boring" && "max-w-5xl px-8"
+      )}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/new" element={<RuleEditor />} />

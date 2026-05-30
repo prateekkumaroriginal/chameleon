@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { EditorHeader } from "@/options/components/EditorHeader";
 import { RuleForm } from "@/options/components/RuleForm";
+import { useDesignMode } from "@/hooks/useDesignMode";
 import * as storage from "@/services/storageService";
 
 export function RuleEditor() {
@@ -62,6 +63,8 @@ export function RuleEditor() {
     navigate("/");
   };
 
+  const { mode } = useDesignMode();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -82,7 +85,7 @@ export function RuleEditor() {
         onArchive={isNew ? undefined : handleArchive}
       />
 
-      <Separator />
+      {mode === "awesome" && <Separator />}
 
       {/* Form */}
       <RuleForm

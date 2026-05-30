@@ -3,6 +3,7 @@ import { Plus, Archive, Braces } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/PageHeader";
+import { GroupedList, GroupedListItem } from "@/components/ui/grouped-list";
 import {
   Empty,
   EmptyHeader,
@@ -12,10 +13,12 @@ import {
 } from "@/components/ui/empty";
 import { RuleCard } from "@/components/RuleCard";
 import { useRules } from "@/hooks/useRules";
+import { useDesignMode } from "@/hooks/useDesignMode";
 
 export function RulesList() {
   const { rules, loading, toggle } = useRules();
   const navigate = useNavigate();
+  const { mode } = useDesignMode();
 
   return (
     <div className="space-y-6">
@@ -36,7 +39,7 @@ export function RulesList() {
         }
       />
 
-      <Separator />
+      {mode === "awesome" && <Separator />}
 
       {/* Rules list */}
       {loading ? (
@@ -58,6 +61,18 @@ export function RulesList() {
             </Button>
           </EmptyContent>
         </Empty>
+      ) : mode === "boring" ? (
+        <GroupedList>
+          {rules.map((rule) => (
+            <GroupedListItem key={rule.id}>
+              <RuleCard
+                rule={rule}
+                onToggle={toggle}
+                onClick={() => navigate(`/edit/${rule.id}`)}
+              />
+            </GroupedListItem>
+          ))}
+        </GroupedList>
       ) : (
         <div className="space-y-2">
           {rules.map((rule) => (

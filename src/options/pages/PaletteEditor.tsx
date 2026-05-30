@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { CSSEditor } from "@/components/CSSEditor";
+import { useDesignMode } from "@/hooks/useDesignMode";
 import type { PaletteVariant } from "@/types/palette";
 import * as paletteStorage from "@/services/paletteService";
 
@@ -106,6 +107,8 @@ export function PaletteEditor() {
     );
   };
 
+  const { mode } = useDesignMode();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -138,7 +141,7 @@ export function PaletteEditor() {
         }
       />
 
-      <Separator />
+      {mode === "awesome" && <Separator />}
 
       {/* Form fields */}
       <div className="grid gap-6">

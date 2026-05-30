@@ -14,5 +14,9 @@ export const WORKFLOW_PANEL_TRANSITION_MS = 360;
 export type ThemePreference = (typeof THEME_PREFERENCES)[number];
 export type ResolvedTheme = "light" | "dark";
 
+export const DESIGN_MODE_STORAGE_KEY = "chameleon_design_mode";
+export const DESIGN_MODES = ["awesome", "boring"] as const;
+export type DesignMode = (typeof DESIGN_MODES)[number];
+
 export const STYLE_ID_PREFIX = "chameleon-style-";
 export const PALETTE_STYLE_PREFIX = "chameleon-palette-";
