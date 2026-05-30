@@ -28,6 +28,8 @@
 </starlight-theme-select>
 
 <script>
+  import { THEME_SHOCKWAVE_DURATION_MS } from "../config";
+
   type ThemePreference = "auto" | "light" | "dark";
 
   const storageKey = "starlight-theme";
@@ -89,7 +91,7 @@
             ],
           },
           {
-            duration: 720,
+            duration: THEME_SHOCKWAVE_DURATION_MS,
             easing: "cubic-bezier(0.16, 1, 0.3, 1)",
             pseudoElement: "::view-transition-new(root)",
           },
